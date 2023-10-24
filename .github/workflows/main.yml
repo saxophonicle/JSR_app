@@ -16,7 +16,7 @@ permissions:
       id-token: write   # This is required for requesting the JWT
       contents: read    # This is required for actions/checkout
 jobs:
-  AssumeRoleAndCallIdentity:
+  S3UploadObjects:
     runs-on: ubuntu-latest
     steps:
       - name: Git clone the repository
@@ -28,8 +28,9 @@ jobs:
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
       # Hello from AWS: WhoAmI
-      - name: Sts GetCallerIdentity
+      - name: Upload Favicon
         run: |
-          aws sts get-caller-identity
           aws s3 cp public/favicon.ico s3://jsr-bucket/
+      - name: Upload Index
+        run: |
           aws s3 cp public/index.html s3://jsr-bucket/
