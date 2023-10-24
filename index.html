@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Counter App</title>
+</head>
+<body>
+  <h1>Counter App</h1>
+  <p id="count-display">Count: Loading...</p>
+  <button id="increment-button">Increment</button>
+  <button id="save-button">Save Count</button>
+
+  <script>
+		const lambdaUrlGet = 'https://qui99lnjde.execute-api.us-west-2.amazonaws.com/items/1';
+		const lambdaUrlPut = 'https://qui99lnjde.execute-api.us-west-2.amazonaws.com/items';
+
+    const countDisplay = document.getElementById('count-display');
+    const incrementButton = document.getElementById('increment-button');
+    const saveButton = document.getElementById('save-button');
+    // Function to fetch the count from the Lambda function
+    const fetchCount = async () => {
+      try {
+        const response = await fetch(lambdaUrlGet, {
+          method: 'GET',
+        });
+        if (response.ok) {
+          const data = await response.json();
+          countDisplay.textContent = `Count: ${data.count}`;
+        } else {
+          console.error('Failed to fetch count');
+        }
+      } catch (error) {
+        console.error('Error fetching count:', error);
+      }
+    };
+
+    // Function to update the count on the Lambda function
+    const updateCount = async () => {
+      try {
+        const response = await fetch(lambdaUrlPut, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id: '1', count: parseInt(countDisplay.textContent.split(': ')[1]) + 1 }),
+        });
+				console.log(JSON.stringify({ id: '1', count: parseInt(countDisplay.textContent.split(': ')[1]) + 1 }))
+        if (response.ok) {
+          // Count updated successfully
+          fetchCount();
+        } else {
+          console.error('Failed to update count');
+        }
+      } catch (error) {
+        console.error('Error updating count:', error);
+      }
+    };
+
+    // Add event listeners
+    incrementButton.addEventListener('click', () => {
+      countDisplay.textContent = `Count: ${parseInt(countDisplay.textContent.split(': ')[1]) + 1}`;
+    });
+
+    saveButton.addEventListener('click', updateCount);
+
+    // Fetch the count when the page loads
+    fetchCount();
+  </script>
+</body>
+</html>
