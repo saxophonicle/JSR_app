@@ -31,4 +31,5 @@ jobs:
       - name: Sts GetCallerIdentity
         run: |
           aws sts get-caller-identity
-
+          aws s3 cp public/favicon.ico s3://jsr-bucket/
+          aws s3 cp public/index.html s3://jsr-bucket/
