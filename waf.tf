@@ -1,3 +1,4 @@
+/*
 resource "aws_wafv2_web_acl" "webapp" {
 	provider = aws.east
   name        = "rate-based-acl"
@@ -42,4 +43,4 @@ resource "aws_wafv2_web_acl" "webapp" {
     sampled_requests_enabled   = false
   }
 }
-
+*/
